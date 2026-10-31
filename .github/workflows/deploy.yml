@@ -1,0 +1,53 @@
+name: Build and Deploy to BigRock & GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Build Production Bundle (./dist)
+        run: npm run build
+
+      - name: Sync Compiled Site to BigRock via FTP
+        env:
+          HAS_FTP_SECRET: ${{ secrets.FTP_SERVER }}
+        if: ${{ env.HAS_FTP_SECRET != '' }}
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          port: 21
+          # If your FTP user lands directly in public_html, keep "./"
+          # If your FTP user lands in the root home directory, change to "public_html/"
+          server-dir: ./
+          local-dir: ./dist/
+
+      - name: Deploy Compiled Site to GitHub Pages
+        continue-on-error: true
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          cname: www.jeljapanenterpriseltd.info
+

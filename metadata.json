@@ -1,0 +1,7 @@
+{
+  "name": "Jel Japan Enterprise Ltd.",
+  "description": "Buyer & Merchant Exporter (Buy & Sell) — International Commodity Procurement, Export Supply, Industrial Equipment, Agricultural Nutrients & Global Logistics via Port of Point Lisas.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+
