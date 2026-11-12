@@ -1,6 +1,93 @@
 <!doctype html>
 <html lang="en" class="scroll-smooth">
   <head>
+    <script>
+      (function () {
+        try {
+          // 1. Suppress third-party browser extension errors on getter-only window.fetch
+          window.addEventListener(
+            'error',
+            function (event) {
+              var msg = event && event.message ? String(event.message) : '';
+              var file = event && event.filename ? String(event.filename) : '';
+              if (
+                msg.indexOf('Cannot set property fetch') !== -1 ||
+                file.indexOf('chrome-extension://') === 0
+              ) {
+                event.stopImmediatePropagation();
+                event.preventDefault();
+                return false;
+              }
+            },
+            true
+          );
+
+          // 2. Ensure any existing or future defineProperty on window.fetch includes a setter
+          var origDefineProperty = Object.defineProperty;
+          Object.defineProperty = function (obj, prop, descriptor) {
+            if (
+              prop === 'fetch' &&
+              (obj === window || (typeof Window !== 'undefined' && obj === Window.prototype)) &&
+              descriptor &&
+              typeof descriptor.get === 'function' &&
+              typeof descriptor.set !== 'function'
+            ) {
+              var currentGetter = descriptor.get;
+              var customFn = null;
+              descriptor = {
+                configurable: true,
+                enumerable: descriptor.enumerable !== false,
+                get: function () {
+                  return customFn || currentGetter.call(this);
+                },
+                set: function (fn) {
+                  if (typeof fn === 'function') {
+                    customFn = fn;
+                  }
+                }
+              };
+            }
+            return origDefineProperty.call(Object, obj, prop, descriptor);
+          };
+
+          // 3. Unconditionally define an own getter/setter on window so `window.fetch = ...` never fails
+          var initialFetch = typeof window.fetch === 'function' ? window.fetch.bind(window) : null;
+          var assignedFetch = null;
+
+          origDefineProperty.call(Object, window, 'fetch', {
+            configurable: true,
+            enumerable: true,
+            get: function () {
+              return assignedFetch || initialFetch;
+            },
+            set: function (fn) {
+              if (typeof fn === 'function') {
+                assignedFetch = fn;
+              }
+            }
+          });
+
+          if (typeof Window !== 'undefined' && Window.prototype) {
+            try {
+              origDefineProperty.call(Object, Window.prototype, 'fetch', {
+                configurable: true,
+                enumerable: true,
+                get: function () {
+                  return assignedFetch || initialFetch;
+                },
+                set: function (fn) {
+                  if (typeof fn === 'function') {
+                    assignedFetch = fn;
+                  }
+                }
+              });
+            } catch (eProto) {}
+          }
+        } catch (err) {
+          // Ignore compatibility errors
+        }
+      })();
+    </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Jel Japan Enterprise Ltd. | Buyer & Merchant Exporter (Buy & Sell)</title>
