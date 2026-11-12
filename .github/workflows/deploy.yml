@@ -29,9 +29,10 @@ jobs:
       - name: Deploy Compiled Site to BigRock Web Root (./)
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          server: ${{ secrets.FTP_SERVER }}
+          server: 208.91.198.118
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftps
           port: 21
           security: loose
           local-dir: ./dist/
