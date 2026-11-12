@@ -14,7 +14,7 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
   // Single-element wordmark strictly for the Top Bar Contract
   if (variant === 'wordmark') {
     return (
-      <span className={`font-display text-lg font-extrabold tracking-tight text-white whitespace-nowrap shrink-0 ${className}`}>
+      <span className={`font-display text-sm sm:text-lg font-extrabold tracking-tight text-white whitespace-nowrap shrink-0 ${className}`}>
         Jel Japan Enterprise <span className="text-[#F1C40F]">Ltd.</span>
       </span>
     );
@@ -137,31 +137,31 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
   const isLight = variant === 'light';
 
   return (
-    <div className={`flex items-center gap-3.5 group select-none ${className}`}>
+    <div className={`flex items-center gap-3 sm:gap-3.5 group select-none min-w-0 ${className}`}>
       {emblem}
-      <div className="flex flex-col">
-        <div className="flex items-center gap-1.5 leading-none">
+      <div className="flex flex-col min-w-0">
+        <div className="flex flex-wrap items-baseline gap-x-1.5 leading-tight">
           <span
             className={`font-display font-extrabold tracking-tight ${
               isLight ? 'text-white' : 'text-[#060E18]'
             } ${
-              size === 'sm' ? 'text-base' : size === 'lg' ? 'text-2xl' : 'text-lg sm:text-xl'
+              size === 'sm' ? 'text-sm sm:text-base' : size === 'lg' ? 'text-xl sm:text-2xl' : 'text-base sm:text-xl'
             }`}
           >
             JEL JAPAN ENTERPRISE
           </span>
           <span
             className={`font-display font-extrabold ${
-              size === 'sm' ? 'text-base' : size === 'lg' ? 'text-2xl' : 'text-lg sm:text-xl'
+              size === 'sm' ? 'text-sm sm:text-base' : size === 'lg' ? 'text-xl sm:text-2xl' : 'text-base sm:text-xl'
             } text-[#F1C40F]`}
           >
             LTD.
           </span>
         </div>
         <span
-          className={`font-medium mt-1 ${
+          className={`font-medium mt-0.5 leading-snug ${
             isLight ? 'text-slate-300' : 'text-slate-600'
-          } ${size === 'sm' ? 'text-[10px]' : size === 'lg' ? 'text-xs' : 'text-xs'}`}
+          } ${size === 'sm' ? 'text-[10px]' : 'text-[11px] sm:text-xs'}`}
         >
           Buyer &amp; Merchant Exporter · Port of Point Lisas, T&amp;T
         </span>

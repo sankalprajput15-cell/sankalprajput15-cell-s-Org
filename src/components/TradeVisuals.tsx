@@ -12,7 +12,7 @@ export const DivisionVisualHeader: React.FC<DivisionGraphicProps> = ({
   categoryLabel,
 }) => {
   return (
-    <div className="relative h-48 w-full bg-[#07111E] overflow-hidden border-b border-slate-200 select-none">
+    <div className="relative h-44 sm:h-48 w-full bg-[#07111E] overflow-hidden border-b border-slate-200 select-none">
       {/* Subtle architectural blueprint grid */}
       <div
         className="absolute inset-0 opacity-20"
@@ -27,9 +27,9 @@ export const DivisionVisualHeader: React.FC<DivisionGraphicProps> = ({
       <div className="absolute inset-0 bg-gradient-to-tr from-[#050B12] via-[#0B192C]/85 to-[#152C48]/70" />
 
       {/* Division-specific realistic technical SVG schematic */}
-      <div className="absolute inset-0 flex items-center justify-end pr-6 opacity-90">
+      <div className="absolute inset-0 flex items-center justify-end pr-2 sm:pr-6 opacity-40 sm:opacity-90">
         {divisionId === 'div1' && (
-          <svg viewBox="0 0 320 160" className="w-64 h-36" fill="none">
+          <svg viewBox="0 0 320 160" className="w-44 sm:w-64 h-28 sm:h-36" fill="none">
             {/* Industrial Stainless Conveyor & Food Processing Line Schematic */}
             <rect x="20" y="95" width="280" height="18" rx="9" stroke="#F1C40F" strokeWidth="2" fill="#0B192C" />
             <circle cx="35" cy="104" r="6" fill="#F1C40F" />
@@ -57,7 +57,7 @@ export const DivisionVisualHeader: React.FC<DivisionGraphicProps> = ({
         )}
 
         {divisionId === 'div2' && (
-          <svg viewBox="0 0 320 160" className="w-64 h-36" fill="none">
+          <svg viewBox="0 0 320 160" className="w-44 sm:w-64 h-28 sm:h-36" fill="none">
             {/* 1000kg FIBC Bulk Bags & Granular Urea Assay Diagram */}
             {/* Pallet Base */}
             <rect x="35" y="130" width="170" height="10" fill="#1E3E62" stroke="#F1C40F" strokeWidth="1.5" />
@@ -96,7 +96,7 @@ export const DivisionVisualHeader: React.FC<DivisionGraphicProps> = ({
         )}
 
         {divisionId === 'div3' && (
-          <svg viewBox="0 0 320 160" className="w-64 h-36" fill="none">
+          <svg viewBox="0 0 320 160" className="w-44 sm:w-64 h-28 sm:h-36" fill="none">
             {/* 208L Steel Drums & 1000L Caged IBC Tote */}
             {/* IBC Caged Tote */}
             <rect x="35" y="42" width="96" height="92" rx="4" fill="#152C48" stroke="#94A3B8" strokeWidth="2" />
@@ -129,7 +129,7 @@ export const DivisionVisualHeader: React.FC<DivisionGraphicProps> = ({
         )}
 
         {divisionId === 'div4' && (
-          <svg viewBox="0 0 320 160" className="w-64 h-36" fill="none">
+          <svg viewBox="0 0 320 160" className="w-44 sm:w-64 h-28 sm:h-36" fill="none">
             {/* Laminated Automotive Safety Glass & Export Crating Schematic */}
             {/* Export Crate Outline */}
             <rect x="30" y="34" width="135" height="102" fill="#0B192C" stroke="#94A3B8" strokeWidth="2" />
@@ -156,16 +156,19 @@ export const DivisionVisualHeader: React.FC<DivisionGraphicProps> = ({
         )}
       </div>
 
+      {/* Readability protection gradient for mobile */}
+      <div className="absolute inset-0 bg-gradient-to-r from-[#050B12] via-[#07111E]/90 to-transparent sm:via-[#07111E]/60 pointer-events-none" />
+
       {/* Left Overlay: Clean Technical Metadata */}
-      <div className="relative z-10 h-full p-6 flex flex-col justify-between max-w-[60%]">
-        <div className="text-xs font-mono text-amber-300 tracking-wide">
+      <div className="relative z-10 h-full p-4 sm:p-6 flex flex-col justify-between max-w-[78%] sm:max-w-[60%]">
+        <div className="text-[11px] sm:text-xs font-mono text-amber-300 tracking-wide">
           {hsCode}
         </div>
         <div>
-          <div className="text-[11px] font-mono text-slate-300">
+          <div className="text-[10px] sm:text-[11px] font-mono text-slate-300">
             PORT OF POINT LISAS · STAGING GATEWAY
           </div>
-          <div className="text-sm font-bold text-white mt-0.5">
+          <div className="text-xs sm:text-sm font-bold text-white mt-0.5 leading-snug">
             {categoryLabel}
           </div>
         </div>
@@ -178,13 +181,13 @@ export const PortTerminalVisualCard: React.FC = () => {
   return (
     <div className="bg-[#060E18] border border-[#1E3E62] rounded-xl overflow-hidden shadow-lg">
       {/* Terminal Schematic Header */}
-      <div className="px-5 py-3.5 bg-[#0B192C] border-b border-[#1E3E62] flex items-center justify-between text-xs">
+      <div className="px-4 sm:px-5 py-3 sm:py-3.5 bg-[#0B192C] border-b border-[#1E3E62] flex flex-col sm:flex-row sm:items-center justify-between gap-1 text-xs">
         <span className="font-semibold text-white">Port of Point Lisas · Deepwater Terminal Blueprint</span>
-        <span className="font-mono text-slate-300 tabular-nums">10°24&apos;18&quot;N · 61°29&apos;42&quot;W</span>
+        <span className="font-mono text-[11px] sm:text-xs text-slate-300 tabular-nums">10°24&apos;18&quot;N · 61°29&apos;42&quot;W</span>
       </div>
 
       {/* High-precision SVG Maritime Port & Vessel Berthing Illustration */}
-      <div className="relative p-6 bg-gradient-to-b from-[#071324] to-[#050B12]">
+      <div className="relative p-3 sm:p-6 bg-gradient-to-b from-[#071324] to-[#050B12]">
         <svg viewBox="0 0 800 260" className="w-full h-auto" fill="none">
           {/* Grid lines */}
           <line x1="0" y1="60" x2="800" y2="60" stroke="#152C48" strokeWidth="1" strokeDasharray="4 4" />
