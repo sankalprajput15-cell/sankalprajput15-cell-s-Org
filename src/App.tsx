@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Anchor,
   Menu,
@@ -33,6 +33,7 @@ import {
 } from 'lucide-react';
 import { BrandLogo } from './components/BrandLogo';
 import { DivisionVisualHeader, PortTerminalVisualCard } from './components/TradeVisuals';
+import { SeoKnowledgeHub } from './components/SeoKnowledgeHub';
 import {
   COMMODITY_DIVISIONS,
   PORT_ROUTES,
@@ -79,6 +80,29 @@ export default function App() {
   const [generatedRefId, setGeneratedRefId] = useState('JEL-TRD-2026-9942');
   const [tradeMailtoUrl, setTradeMailtoUrl] = useState('');
   const [copiedTradeSummary, setCopiedTradeSummary] = useState(false);
+
+  // Auto-adjust navigation & modal state on screen resize / orientation change & Escape key
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 768) {
+        setMobileMenuOpen(false);
+      }
+    };
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setMobileMenuOpen(false);
+        setModalOpen(false);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
 
   // Quick form submission routes to Trade Desk
   const handleQuickSubmit = (e: React.FormEvent) => {
@@ -245,14 +269,14 @@ export default function App() {
     <div className="bg-slate-50 text-slate-800 antialiased selection:bg-[#F1C40F] selection:text-[#0B192C] overflow-x-hidden pb-16 md:pb-0">
       {/* Strict 3-Zone Top Bar Contract */}
       <header className="sticky top-0 z-50 bg-[#0B192C]/95 backdrop-blur-md border-b border-[#1E3E62]/80">
-        <div className="max-w-7xl mx-auto px-3.5 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-2 sm:gap-6 lg:gap-8">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 min-h-[4rem] py-2 flex items-center justify-between gap-2 sm:gap-4 lg:gap-8">
           {/* Zone 1: Single-line Brand Wordmark */}
           <a href="#" className="whitespace-nowrap shrink-0 focus:outline-none">
             <BrandLogo variant="wordmark" />
           </a>
 
-          {/* Zone 2: 5 Concise Single-Line Navigation Links */}
-          <nav className="hidden md:flex items-center gap-7 text-sm font-medium text-slate-200">
+          {/* Zone 2: 5 Concise Single-Line Navigation Links (Fluid spacing for 768px tablets up to 4K) */}
+          <nav className="hidden md:flex items-center gap-3.5 lg:gap-7 text-xs lg:text-sm font-medium text-slate-200">
             <a
               href="#how-we-trade"
               className="hover:text-[#F1C40F] hover:underline underline-offset-4 transition-colors whitespace-nowrap shrink-0"
@@ -278,10 +302,16 @@ export default function App() {
               Manifests
             </a>
             <a
-              href="#calculator"
+              href="#articles"
               className="hover:text-[#F1C40F] hover:underline underline-offset-4 transition-colors whitespace-nowrap shrink-0"
             >
-              Freight Desk
+              Trade Articles
+            </a>
+            <a
+              href="#faq"
+              className="hover:text-[#F1C40F] hover:underline underline-offset-4 transition-colors whitespace-nowrap shrink-0"
+            >
+              Directory &amp; FAQ
             </a>
           </nav>
 
@@ -290,18 +320,18 @@ export default function App() {
             <a
               href="#trade-desk"
               onClick={() => setTradeMode('buy')}
-              className="bg-[#F1C40F] hover:bg-[#F4D03F] text-[#060E18] text-[11px] sm:text-xs font-bold px-3 sm:px-4 py-2 rounded-lg transition-colors whitespace-nowrap shrink-0 shadow-sm"
+              className="bg-[#F1C40F] hover:bg-[#F4D03F] text-[#060E18] text-[11px] sm:text-xs font-bold px-2.5 sm:px-4 py-2 rounded-lg transition-colors whitespace-nowrap shrink-0 shadow-sm"
             >
-              <span className="sm:hidden">Trade Desk</span>
-              <span className="hidden sm:inline">Trade Desk Portal</span>
+              Trade Desk Portal
             </a>
 
             <button
               type="button"
               id="mobile-menu-toggle"
               aria-label="Toggle navigation menu"
+              aria-expanded={mobileMenuOpen}
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden w-10 h-10 flex items-center justify-center rounded-lg border border-[#1E3E62] bg-[#060E18]/60 text-slate-200 hover:text-[#F1C40F] focus:outline-none"
+              className="md:hidden w-10 h-10 flex items-center justify-center rounded-lg border border-[#1E3E62] bg-[#060E18]/60 text-slate-200 hover:text-[#F1C40F] focus:outline-none shrink-0"
             >
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
@@ -340,11 +370,18 @@ export default function App() {
               04 · Recent Consignments &amp; Proof
             </a>
             <a
-              href="#calculator"
+              href="#articles"
               onClick={() => setMobileMenuOpen(false)}
               className="block text-slate-200 hover:text-[#F1C40F] hover:bg-[#0B192C] font-medium text-sm py-2.5 px-3 rounded-lg transition-colors"
             >
-              05 · Freight &amp; Transit Calculator
+              05 · Trade Intelligence &amp; Articles
+            </a>
+            <a
+              href="#faq"
+              onClick={() => setMobileMenuOpen(false)}
+              className="block text-slate-200 hover:text-[#F1C40F] hover:bg-[#0B192C] font-medium text-sm py-2.5 px-3 rounded-lg transition-colors"
+            >
+              07 · Corporate Directory &amp; FAQ
             </a>
             <div className="pt-3 mt-2 border-t border-[#152C48] grid grid-cols-2 gap-2.5">
               <a
@@ -457,11 +494,11 @@ export default function App() {
               <div className="w-full bg-[#0B192C] p-5 sm:p-8 rounded-xl border border-[#1E3E62] shadow-xl flex flex-col justify-between">
                 <div>
                   {/* Segmented Interactive Control */}
-                  <div className="grid grid-cols-2 gap-1 rounded-lg bg-[#060E18] p-1 border border-[#1E3E62] mb-5">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 rounded-lg bg-[#060E18] p-1.5 border border-[#1E3E62] mb-5">
                     <button
                       type="button"
                       onClick={() => setQuickTradeType('buy')}
-                      className={`py-2.5 px-2.5 text-xs font-bold rounded-md transition-colors flex items-center justify-center gap-1.5 cursor-pointer ${
+                      className={`py-2.5 px-3 text-xs font-bold rounded-md transition-colors flex items-center justify-center gap-1.5 cursor-pointer ${
                         quickTradeType === 'buy'
                           ? 'bg-[#F1C40F] text-[#060E18] shadow-sm'
                           : 'text-slate-300 hover:text-white'
@@ -473,14 +510,14 @@ export default function App() {
                     <button
                       type="button"
                       onClick={() => setQuickTradeType('sell')}
-                      className={`py-2.5 px-2.5 text-xs font-bold rounded-md transition-colors flex items-center justify-center gap-1.5 cursor-pointer ${
+                      className={`py-2.5 px-3 text-xs font-bold rounded-md transition-colors flex items-center justify-center gap-1.5 cursor-pointer ${
                         quickTradeType === 'sell'
                           ? 'bg-[#1E3E62] text-white shadow-sm'
                           : 'text-slate-300 hover:text-white'
                       }`}
                     >
                       <ArrowUpRight className="w-3.5 h-3.5 text-[#F1C40F] shrink-0" />
-                      <span>SELL to Jel</span>
+                      <span>I Want to SELL to Jel</span>
                     </button>
                   </div>
 
@@ -1146,34 +1183,57 @@ export default function App() {
             </div>
 
             <div className="lg:col-span-6 bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm">
-              <div className="px-4 sm:px-6 py-3.5 sm:py-4 bg-[#0B192C] text-white flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+              <div className="px-4 sm:px-6 py-3.5 sm:py-4 bg-[#0B192C] text-white flex flex-wrap items-center justify-between gap-2">
                 <span className="font-display font-bold text-sm">
                   Active Ocean Liner &amp; Feeder Transit Matrix
                 </span>
                 <span className="text-[11px] sm:text-xs font-mono text-[#F1C40F]">Origin: Point Lisas (T&amp;T)</span>
               </div>
-              <div className="overflow-x-auto">
+
+              {/* Mobile Stacked Route Cards (<sm) so zero columns are cut off on narrow phones */}
+              <div className="sm:hidden divide-y divide-slate-200">
+                {PORT_ROUTES.slice(1).map((route) => (
+                  <div key={route.portName} className="p-4 space-y-2 text-xs">
+                    <div className="flex items-start justify-between gap-2">
+                      <div>
+                        <div className="font-semibold text-slate-900 text-sm">{route.portName}</div>
+                        <div className="text-slate-500">{route.country}</div>
+                      </div>
+                      <span className="font-mono font-bold text-[#0B192C] tabular-nums shrink-0">
+                        {route.transitDays}
+                      </span>
+                    </div>
+                    <div className="flex flex-wrap items-center justify-between gap-2 pt-1 text-slate-600">
+                      <span>Schedule: {route.departureFrequency}</span>
+                      <span className="font-mono font-semibold text-slate-800">{route.recommendedIncoterm}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Tablet & Desktop Transit Table (sm+) */}
+              <div className="hidden sm:block overflow-x-auto">
                 <table className="w-full text-left border-collapse text-xs">
                   <thead>
                     <tr className="bg-slate-50 text-slate-500 border-b border-slate-200 uppercase">
-                      <th className="py-3 px-3.5 sm:px-4 font-semibold">Port Hub</th>
-                      <th className="py-3 px-3 sm:px-4 font-semibold">Est. Transit</th>
-                      <th className="py-3 px-3 sm:px-4 font-semibold">Frequency</th>
-                      <th className="py-3 px-3.5 sm:px-4 font-semibold">Terms</th>
+                      <th className="py-3 px-4 font-semibold">Port Hub</th>
+                      <th className="py-3 px-4 font-semibold">Est. Transit</th>
+                      <th className="py-3 px-4 font-semibold">Frequency</th>
+                      <th className="py-3 px-4 font-semibold">Standard Terms</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-200">
                     {PORT_ROUTES.slice(1).map((route) => (
                       <tr key={route.portName} className="hover:bg-slate-50">
-                        <td className="py-3 px-3.5 sm:px-4">
+                        <td className="py-3 px-4">
                           <div className="font-semibold text-slate-900">{route.portName}</div>
                           <div className="text-slate-500">{route.country}</div>
                         </td>
-                        <td className="py-3 px-3 sm:px-4 font-mono font-semibold text-[#0B192C] tabular-nums whitespace-nowrap">
+                        <td className="py-3 px-4 font-mono font-semibold text-[#0B192C] tabular-nums whitespace-nowrap">
                           {route.transitDays}
                         </td>
-                        <td className="py-3 px-3 sm:px-4 text-slate-600">{route.departureFrequency}</td>
-                        <td className="py-3 px-3.5 sm:px-4 font-mono text-slate-700 whitespace-nowrap">
+                        <td className="py-3 px-4 text-slate-600">{route.departureFrequency}</td>
+                        <td className="py-3 px-4 font-mono text-slate-700 whitespace-nowrap">
                           {route.recommendedIncoterm}
                         </td>
                       </tr>
@@ -1216,199 +1276,6 @@ export default function App() {
                   </div>
                 </div>
               ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Section 5: Interactive Maritime Freight & Routing Calculator */}
-      <section id="calculator" className="py-12 sm:py-20 bg-[#07111E] text-white border-b border-[#152C48]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-3xl mb-8 sm:mb-12">
-            <div className="text-xs font-bold uppercase tracking-widest text-[#F1C40F]">
-              05 · Pre-Shipment Logistics &amp; Freight Estimator
-            </div>
-            <h2
-              className="font-display text-2xl sm:text-4xl font-extrabold text-white mt-2"
-              style={{ textWrap: 'balance' }}
-            >
-              Calculate Container Allocation, Transit Time &amp; Freight Band
-            </h2>
-            <p className="text-slate-300 mt-2 text-sm sm:text-base leading-relaxed">
-              Model your consignment volume from the Port of Point Lisas and transfer parameters directly into
-              your formal Request for Quotation.
-            </p>
-          </div>
-
-          <div className="bg-[#0B192C] border border-[#1E3E62] rounded-xl p-5 sm:p-8 shadow-xl grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-center">
-            {/* Input Controls */}
-            <div className="lg:col-span-7 space-y-5">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
-                <div>
-                  <label
-                    htmlFor="calc-division"
-                    className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5"
-                  >
-                    Commodity Division
-                  </label>
-                  <select
-                    id="calc-division"
-                    value={calcDivision}
-                    onChange={(e) => setCalcDivision(e.target.value)}
-                    className="w-full bg-[#060E18] border border-[#1E3E62] rounded-lg px-3.5 py-2.5 min-h-[44px] text-base sm:text-sm text-white focus:outline-none focus:border-[#F1C40F]"
-                  >
-                    <option value="Industrial Equipment, Food Grade Machinery & Belting">
-                      01 · Industrial Equipment &amp; Machinery
-                    </option>
-                    <option value="Agricultural Fertilizers, Nitrogen Compounds & Soil Nutrients">
-                      02 · Agricultural Fertilizers (Urea 46% / DAP)
-                    </option>
-                    <option value="Industrial Lubricants, Virgin Base Oils & Process Chemicals">
-                      03 · Industrial Lubricants &amp; Base Oils
-                    </option>
-                    <option value="Automotive Safety Glass, Commercial Spares & Fleet Supplies">
-                      04 · Automotive Safety Glass &amp; Spares
-                    </option>
-                  </select>
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="calc-tonnage"
-                    className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5"
-                  >
-                    Net Cargo Tonnage (Metric Tons)
-                  </label>
-                  <input
-                    type="number"
-                    min="1"
-                    max="25000"
-                    id="calc-tonnage"
-                    value={calcTonnage}
-                    onChange={(e) => setCalcTonnage(Number(e.target.value))}
-                    className="w-full bg-[#060E18] border border-[#1E3E62] rounded-lg px-3.5 py-2.5 min-h-[44px] text-base sm:text-sm text-white font-mono tabular-nums focus:outline-none focus:border-[#F1C40F]"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
-                <div>
-                  <label
-                    htmlFor="calc-port"
-                    className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5"
-                  >
-                    Discharge Port Hub
-                  </label>
-                  <select
-                    id="calc-port"
-                    value={calcPort}
-                    onChange={(e) => setCalcPort(e.target.value)}
-                    className="w-full bg-[#060E18] border border-[#1E3E62] rounded-lg px-3.5 py-2.5 min-h-[44px] text-base sm:text-sm text-white focus:outline-none focus:border-[#F1C40F]"
-                  >
-                    <option value="Port of Georgetown, Guyana (3-4 Days)">
-                      Port of Georgetown, Guyana (3–4 Days)
-                    </option>
-                    <option value="Bridgetown Port, Barbados (2-3 Days)">
-                      Port of Bridgetown, Barbados (2–3 Days)
-                    </option>
-                    <option value="Port of Kingston, Jamaica (4-6 Days)">
-                      Port of Kingston, Jamaica (4–6 Days)
-                    </option>
-                    <option value="Port of Miami, USA (7-9 Days)">Port of Miami, USA (7–9 Days)</option>
-                    <option value="Port of Houston, USA (8-10 Days)">Port of Houston, USA (8–10 Days)</option>
-                    <option value="Port of Rotterdam, Netherlands (18-21 Days)">
-                      Port of Rotterdam, Netherlands (18–21 Days)
-                    </option>
-                    <option value="Port of Yokohama, Japan (34-40 Days)">
-                      Port of Yokohama, Japan (34–40 Days)
-                    </option>
-                  </select>
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="calc-incoterm"
-                    className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5"
-                  >
-                    Incoterms 2020 Delivery Basis
-                  </label>
-                  <select
-                    id="calc-incoterm"
-                    value={calcIncoterm}
-                    onChange={(e) => setCalcIncoterm(e.target.value)}
-                    className="w-full bg-[#060E18] border border-[#1E3E62] rounded-lg px-3.5 py-2.5 min-h-[44px] text-base sm:text-sm text-white focus:outline-none focus:border-[#F1C40F]"
-                  >
-                    <option value="CIF Destination">CIF (Cost, Insurance &amp; Freight)</option>
-                    <option value="FOB Point Lisas">FOB (Free On Board - Point Lisas)</option>
-                    <option value="CFR Port of Discharge">CFR (Cost and Freight)</option>
-                    <option value="EXW Point Lisas Warehouse">EXW (Ex Works - Staging Depot)</option>
-                  </select>
-                </div>
-              </div>
-
-              {/* Incoterms Quick Reference Strip */}
-              <div className="pt-4 border-t border-[#152C48] grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-slate-300">
-                {INCOTERMS_INFO.slice(0, 2).map((info) => (
-                  <div key={info.code} className="bg-[#060E18] p-3.5 rounded-lg border border-[#1E3E62]">
-                    <div className="font-mono font-bold text-[#F1C40F]">{info.code}</div>
-                    <p className="text-slate-300 mt-1 leading-relaxed">{info.desc}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Calculated Output Breakdown */}
-            <div className="lg:col-span-5 bg-[#060E18] border border-[#1E3E62] rounded-xl p-5 sm:p-6">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 border-b border-[#152C48] pb-3.5 mb-4 sm:mb-5">
-                <span className="font-display font-bold text-sm text-white flex items-center gap-2">
-                  <ClipboardCheck className="w-4 h-4 text-[#F1C40F] shrink-0" />
-                  <span>Point Lisas Dispatch Estimate</span>
-                </span>
-                <span className="text-[11px] sm:text-xs text-[#F1C40F] font-mono">PLIPDECO BERTH #3</span>
-              </div>
-
-              <div className="space-y-3 text-xs sm:text-sm">
-                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-0.5 py-1.5 border-b border-[#152C48]/70">
-                  <span className="text-slate-400">Equipment Allocation:</span>
-                  <strong className="text-white font-mono tabular-nums sm:text-right">
-                    {getContainerEstimate()}
-                  </strong>
-                </div>
-
-                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-0.5 py-1.5 border-b border-[#152C48]/70">
-                  <span className="text-slate-400">Estimated Ocean Transit:</span>
-                  <strong className="text-[#F1C40F] font-mono tabular-nums sm:text-right">
-                    {getTransitEstimate()}
-                  </strong>
-                </div>
-
-                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-0.5 py-1.5 border-b border-[#152C48]/70">
-                  <span className="text-slate-400">Indicative Freight / THC:</span>
-                  <strong className="text-white font-mono tabular-nums sm:text-right">
-                    {getEstimatedFreightBand()}
-                  </strong>
-                </div>
-
-                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-0.5 py-1.5">
-                  <span className="text-slate-400">Inspection &amp; Marine Cover:</span>
-                  <span className="text-emerald-400 font-medium sm:text-right">
-                    SGS Seal + ICC (A) Marine Policy
-                  </span>
-                </div>
-              </div>
-
-              <button
-                type="button"
-                onClick={handleApplyCalculatorToRfq}
-                className="mt-5 sm:mt-6 w-full bg-[#F1C40F] hover:bg-[#F4D03F] text-[#060E18] font-bold py-3.5 px-4 min-h-[48px] rounded-lg transition-colors text-xs sm:text-sm flex items-center justify-center gap-2 text-center cursor-pointer shadow"
-              >
-                <FileSpreadsheet className="w-4 h-4 shrink-0" />
-                <span>
-                  {calcApplied
-                    ? 'Applied to Formal Trade Desk Form!'
-                    : 'Transfer Parameters to Formal Buy RFQ'}
-                </span>
-              </button>
             </div>
           </div>
         </div>
@@ -1490,7 +1357,13 @@ export default function App() {
         </div>
       </section>
 
-      {/* Section 7: Commercial Trade Desk Portal (Dual Mode: I Want to BUY / I Want to SELL) */}
+      {/* Section 05 & 07: SEO Trade Intelligence Articles, Official Corporate Directory & FAQ */}
+      <SeoKnowledgeHub
+        onSelectBuyProduct={handleSelectBuyProduct}
+        onSelectSellToUs={handleSelectSellToUs}
+      />
+
+      {/* Section 8: Commercial Trade Desk Portal (Dual Mode: I Want to BUY / I Want to SELL) */}
       <section id="trade-desk" className="py-12 sm:py-20 bg-slate-100">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-white border border-slate-200 rounded-xl shadow-lg overflow-hidden">
@@ -1498,42 +1371,40 @@ export default function App() {
             <div className="bg-[#0B192C] px-5 sm:px-8 py-6 sm:py-7 text-white">
               <div className="flex flex-wrap items-center justify-between gap-2 mb-4 text-xs">
                 <span className="font-bold uppercase tracking-widest text-[#F1C40F]">
-                  07 · Commercial Trade Desk Portal
+                  08 · Commercial Trade Desk Portal
                 </span>
                 <span className="font-mono text-[11px] sm:text-xs text-slate-300">
                   Direct Dispatch · Port of Point Lisas Desk
                 </span>
               </div>
 
-              {/* Dual Trade Mode Segmented Switcher */}
-              <div className="bg-[#060E18] p-1.5 rounded-xl border border-[#1E3E62] w-full sm:max-w-md mb-5 grid grid-cols-2 gap-1.5">
+              {/* Dual Trade Mode Segmented Switcher (Full labels preserved on all screens) */}
+              <div className="bg-[#060E18] p-1.5 rounded-xl border border-[#1E3E62] w-full sm:max-w-lg mb-5 grid grid-cols-1 sm:grid-cols-2 gap-1.5">
                 <button
                   type="button"
                   id="trade-mode-buy"
                   onClick={() => setTradeMode('buy')}
-                  className={`py-2.5 px-2.5 sm:px-4 rounded-lg text-xs sm:text-sm font-bold transition-colors flex items-center justify-center gap-1.5 cursor-pointer ${
+                  className={`py-2.5 px-3.5 rounded-lg text-xs sm:text-sm font-bold transition-colors flex items-center justify-center gap-2 cursor-pointer ${
                     tradeMode === 'buy'
                       ? 'bg-[#F1C40F] text-[#060E18] shadow-sm'
                       : 'text-slate-300 hover:text-white'
                   }`}
                 >
                   <ArrowDownLeft className="w-4 h-4 shrink-0" />
-                  <span className="sm:hidden">Buy (RFQ)</span>
-                  <span className="hidden sm:inline">I Want to BUY (RFQ)</span>
+                  <span>I Want to BUY (RFQ)</span>
                 </button>
                 <button
                   type="button"
                   id="trade-mode-sell"
                   onClick={() => setTradeMode('sell')}
-                  className={`py-2.5 px-2.5 sm:px-4 rounded-lg text-xs sm:text-sm font-bold transition-colors flex items-center justify-center gap-1.5 cursor-pointer ${
+                  className={`py-2.5 px-3.5 rounded-lg text-xs sm:text-sm font-bold transition-colors flex items-center justify-center gap-2 cursor-pointer ${
                     tradeMode === 'sell'
                       ? 'bg-[#152C48] text-white border border-[#1E3E62]'
                       : 'text-slate-300 hover:text-white'
                   }`}
                 >
                   <ArrowUpRight className="w-4 h-4 text-[#F1C40F] shrink-0" />
-                  <span className="sm:hidden">Sell to Jel</span>
-                  <span className="hidden sm:inline">I Want to SELL to Jel Japan</span>
+                  <span>I Want to SELL to Jel Japan</span>
                 </button>
               </div>
 
@@ -1851,8 +1722,13 @@ export default function App() {
                   </a>
                 </li>
                 <li>
-                  <a href="#calculator" className="hover:text-white transition-colors">
-                    05 · Freight &amp; Transit Estimator
+                  <a href="#articles" className="hover:text-white transition-colors">
+                    05 · Trade Intelligence &amp; Industry Articles
+                  </a>
+                </li>
+                <li>
+                  <a href="#faq" className="hover:text-white transition-colors">
+                    07 · Official Directory, Reviews &amp; Contact FAQ
                   </a>
                 </li>
                 <li>
@@ -1861,7 +1737,7 @@ export default function App() {
                     onClick={() => setTradeMode('buy')}
                     className="hover:text-white transition-colors"
                   >
-                    07 · Submit Export RFQ / Supplier Offer
+                    08 · Submit Export RFQ / Supplier Offer
                   </a>
                 </li>
               </ul>
@@ -1911,11 +1787,11 @@ export default function App() {
       </footer>
 
       {/* Mobile Sticky Bottom Action Bar (<md) for One-Thumb Access */}
-      <div className="md:hidden fixed bottom-0 inset-x-0 z-40 bg-[#060E18]/95 backdrop-blur-md border-t border-[#1E3E62] px-3 py-2.5 grid grid-cols-2 gap-2.5 shadow-2xl">
+      <div className="md:hidden fixed bottom-0 inset-x-0 z-40 bg-[#060E18]/95 backdrop-blur-md border-t border-[#1E3E62] px-3 pt-2.5 safe-bottom-bar grid grid-cols-2 gap-2.5 shadow-2xl">
         <a
           href="#trade-desk"
           onClick={() => setTradeMode('buy')}
-          className="bg-[#F1C40F] active:bg-[#D4AC0D] text-[#060E18] font-bold text-xs py-2.5 px-3 rounded-lg flex items-center justify-center gap-1.5 shadow-sm"
+          className="bg-[#F1C40F] active:bg-[#D4AC0D] text-[#060E18] font-bold text-xs py-2.5 px-3 rounded-lg flex items-center justify-center gap-1.5 shadow-sm text-center"
         >
           <ArrowDownLeft className="w-3.5 h-3.5 shrink-0" />
           <span>Request Quote (Buy)</span>
@@ -1923,7 +1799,7 @@ export default function App() {
         <a
           href="#trade-desk"
           onClick={() => setTradeMode('sell')}
-          className="bg-[#152C48] active:bg-[#1E3E62] text-white border border-[#1E3E62] font-bold text-xs py-2.5 px-3 rounded-lg flex items-center justify-center gap-1.5"
+          className="bg-[#152C48] active:bg-[#1E3E62] text-white border border-[#1E3E62] font-bold text-xs py-2.5 px-3 rounded-lg flex items-center justify-center gap-1.5 text-center"
         >
           <ArrowUpRight className="w-3.5 h-3.5 text-[#F1C40F] shrink-0" />
           <span>Sell to Jel Japan</span>
@@ -1955,25 +1831,25 @@ export default function App() {
               client. You may also launch it manually or copy the dossier text below.
             </p>
 
-            {/* Summary Details */}
-            <div className="bg-slate-50 p-3.5 sm:p-4 rounded-lg border border-slate-200 space-y-2 text-xs mb-5">
+            {/* Summary Details (Zero truncation across all viewports) */}
+            <div className="bg-slate-50 p-3.5 sm:p-4 rounded-lg border border-slate-200 space-y-2.5 text-xs mb-5">
               <div className="flex flex-col sm:flex-row sm:justify-between gap-0.5">
-                <span className="text-slate-500">Manifest Reference:</span>
-                <strong className="text-[#0B192C] font-mono tabular-nums">{generatedRefId}</strong>
+                <span className="text-slate-500 shrink-0">Manifest Reference:</span>
+                <strong className="text-[#0B192C] font-mono tabular-nums sm:text-right">{generatedRefId}</strong>
               </div>
               <div className="flex flex-col sm:flex-row sm:justify-between gap-0.5">
-                <span className="text-slate-500">Trade Direction:</span>
-                <strong className="text-amber-800 uppercase font-semibold">
+                <span className="text-slate-500 shrink-0">Trade Direction:</span>
+                <strong className="text-amber-800 uppercase font-semibold sm:text-right">
                   {tradeMode === 'buy' ? 'Buy from Jel Japan (RFQ)' : 'Sell to Jel Japan (Offer)'}
                 </strong>
               </div>
-              <div className="flex flex-col sm:flex-row sm:justify-between gap-0.5">
-                <span className="text-slate-500">Product Division:</span>
-                <strong className="text-slate-800 sm:truncate sm:max-w-[240px]">{tradeCategory}</strong>
+              <div className="flex flex-col sm:flex-row sm:justify-between gap-1">
+                <span className="text-slate-500 shrink-0">Product Division:</span>
+                <strong className="text-slate-800 sm:text-right">{tradeCategory}</strong>
               </div>
-              <div className="flex flex-col sm:flex-row sm:justify-between gap-0.5">
-                <span className="text-slate-500">Consignment Volume:</span>
-                <strong className="text-slate-800 font-mono tabular-nums">{tradeQuantity}</strong>
+              <div className="flex flex-col sm:flex-row sm:justify-between gap-1">
+                <span className="text-slate-500 shrink-0">Consignment Volume:</span>
+                <strong className="text-slate-800 font-mono tabular-nums sm:text-right">{tradeQuantity}</strong>
               </div>
             </div>
 

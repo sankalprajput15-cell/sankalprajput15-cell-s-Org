@@ -1,8 +1,18 @@
 @import "tailwindcss";
 
 @layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
   body {
     font-family: 'Public Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    min-height: 100dvh;
+    overflow-x: hidden;
+    overflow-wrap: break-word;
   }
 
   h1, h2, h3, h4, .font-display {
@@ -13,8 +23,18 @@
     font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
     font-variant-numeric: tabular-nums;
   }
+
+  img, svg, video, canvas {
+    max-width: 100%;
+    height: auto;
+  }
 }
 
 .tabular-nums {
   font-variant-numeric: tabular-nums;
 }
+
+.safe-bottom-bar {
+  padding-bottom: max(0.625rem, env(safe-area-inset-bottom));
+}
+
