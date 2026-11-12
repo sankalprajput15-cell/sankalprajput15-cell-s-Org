@@ -1,45 +1,6 @@
 <!doctype html>
 <html lang="en" class="scroll-smooth">
   <head>
-    <script>
-      (function() {
-        try {
-          var originalFetch = typeof window !== 'undefined' && window.fetch ? window.fetch.bind(window) : null;
-          var activeFetch = originalFetch;
-
-          function getFetch() {
-            return activeFetch;
-          }
-          function setFetch(fn) {
-            activeFetch = fn;
-          }
-
-          try {
-            Object.defineProperty(window, 'fetch', {
-              get: getFetch,
-              set: setFetch,
-              configurable: true,
-              enumerable: true
-            });
-          } catch (e1) {
-            try {
-              window.fetch = originalFetch;
-            } catch (e2) {}
-          }
-
-          if (typeof Window !== 'undefined' && Window.prototype) {
-            try {
-              Object.defineProperty(Window.prototype, 'fetch', {
-                get: getFetch,
-                set: setFetch,
-                configurable: true,
-                enumerable: true
-              });
-            } catch (e3) {}
-          }
-        } catch (err) {}
-      })();
-    </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Jel Japan Enterprise Ltd. | Buyer & Merchant Exporter (Buy & Sell)</title>

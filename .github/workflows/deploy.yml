@@ -26,32 +26,14 @@ jobs:
       - name: Build Production Bundle
         run: npm run build
 
-      - name: Deploy Compiled Site to BigRock (./jeljapan/)
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-        with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          port: 21
-          local-dir: ./dist/
-          server-dir: ./jeljapan/
-          dangerous-clean-slate: false
-          exclude: |
-            **/.git*
-            **/.git*/**
-            **/node_modules/**
-            **/.htaccess
-            **/well-known/**
-            **/.well-known/**
-
       - name: Deploy Compiled Site to BigRock Web Root (./)
-        continue-on-error: true
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           port: 21
+          security: loose
           local-dir: ./dist/
           server-dir: ./
           dangerous-clean-slate: false
@@ -64,4 +46,3 @@ jobs:
             **/.well-known/**
             **/cgi-bin/**
             **/jeljapan/**
-
